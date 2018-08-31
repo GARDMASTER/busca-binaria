@@ -18,11 +18,11 @@ public class Main {
 		System.out.println("Bem vindo ao MasterCEP Searcher!!");
 		System.out.println("\n");
 		System.out.println("---------------------------------");
-		System.out.println("| 1 - Realizar Busca Bin·ria	|");
+		System.out.println("| 1 - Realizar Busca Bin√°ria	|");
 		System.out.println("| 0 - Sair do programa		|");
 		System.out.println("---------------------------------");
 		Integer opcao;
-		System.out.println("Escolha a opÁ„o desejada: ");
+		System.out.println("Escolha a op√ß√£o desejada: ");
 		opcao = scan.nextInt();
 		String sn = "";
 		do {
@@ -32,17 +32,32 @@ public class Main {
 			case 1:
 				
 				try {
-					System.out.println("Informe o CEP (Somente n˙meros): ");
+					System.out.println("Informe o CEP (Somente n√∫meros): ");
 					String cep = scanTxt.nextLine().trim();
+					
+					boolean onlyNumbers = isOnlyNumbers(cep);
+					while(onlyNumbers != true) {
+						System.out.println("O CEP deve possuir somente n√∫meros!");
+						System.out.println("Informe o CEP (Somente n√∫meros): ");
+						cep = scanTxt.nextLine().trim();
+						onlyNumbers = isOnlyNumbers(cep);
+					}
+					
+					while(cep.length() != 8) {
+						System.out.println("O CEP deve possuir exatos 8 d√≠gitos!");
+						System.out.println("Informe o CEP (Somente n√∫meros): ");
+						cep = scanTxt.nextLine().trim();
+					}
+					
 					RandomAccessFile f = buscaCepOrdenado();
 					buscaBinaria(f, 0L, f.length(), cep);
 				} catch (FileNotFoundException e) {
-					System.err.println("Arquivo n„o encontrado.");
+					System.err.println("Arquivo n√£o encontrado.");
 				} catch (IOException e) {
-					System.err.println("Erro ao realizar busca bin·ria.");
+					System.err.println("Erro ao realizar busca bin√°ria.");
 				} catch (CepNotFoundException e) {
 					System.err.println(e.getMessage());
-				}
+				} 
 				
 				contador=0;
 				System.out.println("Quantidade de consultas realizadas: "+(++contadorConsultas));
@@ -65,8 +80,8 @@ public class Main {
 				System.exit(0);
 			
 			default:
-				System.out.println("Comando n„o reconhecido.");
-				System.out.println("Deseja realizar outra consulta? (s/n)");
+				System.out.println("Comando n√£o reconhecido.");
+				System.out.println("Deseja realizar uma consulta? (s/n)");
 				sn = scanTxt.nextLine();
 				if(sn.equalsIgnoreCase("n")) {
 					System.out.println("Bye bye!");
@@ -91,8 +106,9 @@ public class Main {
 		
 		
 		if(fim < inicio) {
-			throw new CepNotFoundException("O CEP informado n„o existe!!!");
+			throw new CepNotFoundException("O CEP informado n√£o existe!!!");
 		}
+		
 		
 		Endereco end = new Endereco();
 		contador++;
@@ -113,7 +129,7 @@ public class Main {
             System.out.println(end.getEstado());
             System.out.println(end.getSigla());
             System.out.println(end.getCep());
-        	System.out.println("Quantidade de iteraÁıes: "+contador);
+        	System.out.println("Quantidade de itera√ß√µes: "+contador);
         } else if (end.getCep().compareToIgnoreCase(cep) > 0) {
         	buscaBinaria(f, inicio*300, f.getFilePointer()-1, cep);
         } else {
@@ -124,9 +140,22 @@ public class Main {
 	
 	public static RandomAccessFile buscaCepOrdenado() throws FileNotFoundException{
 		
-		RandomAccessFile f = new RandomAccessFile("C:\\Users\\Sala\\workspace\\eclipse\\busca-binaria\\files\\cep_ordenado.dat", "r");
+		RandomAccessFile f = new RandomAccessFile("/home/aluno/Documentos/gard/busca-binaria/files/cep_ordenado.dat", "r");
 		
 		return f;
+	}
+	
+	public static boolean isOnlyNumbers(String x) {
+		boolean isOnlyNumbers = false;
+		
+		try {
+			Long.parseLong(x);
+			isOnlyNumbers =  true;
+		} catch (NumberFormatException e) {
+			isOnlyNumbers =  false;
+		}
+		
+		return isOnlyNumbers;
 	}
 	
 }

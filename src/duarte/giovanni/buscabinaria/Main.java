@@ -104,18 +104,15 @@ public class Main {
 	
 	public static void buscaBinaria(RandomAccessFile f, Long inicio, Long fim, String cep) throws IOException, CepNotFoundException{
 		
+		inicio = inicio / 300;
+		fim = fim / 300;
 		
-		if(fim < inicio) {
+		if(fim <= inicio) {
 			throw new CepNotFoundException("O CEP informado não existe!!!");
 		}
 		
-		
 		Endereco end = new Endereco();
 		contador++;
-		
-		inicio = inicio / 300;
-		
-		fim = fim / 300;
 		
 		Long meio = (inicio + fim) / 2 ;
 		
@@ -140,7 +137,7 @@ public class Main {
 	
 	public static RandomAccessFile buscaCepOrdenado() throws FileNotFoundException{
 		
-		RandomAccessFile f = new RandomAccessFile("/home/aluno/Documentos/gard/busca-binaria/files/cep_ordenado.dat", "r");
+		RandomAccessFile f = new RandomAccessFile("C:\\Users\\Sala\\workspace\\eclipse\\busca-binaria\\files\\cep_ordenado.dat", "r");
 		
 		return f;
 	}
